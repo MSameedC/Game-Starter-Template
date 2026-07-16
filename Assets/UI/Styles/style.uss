@@ -1,0 +1,8 @@
+:root {
+    --primary-font-color: rgb(255, 255, 255);
+    --secondary-font-color: rgb(0, 0, 0);
+}
+
+.unity-label {
+    color: var(--primary-font-color);
+}
