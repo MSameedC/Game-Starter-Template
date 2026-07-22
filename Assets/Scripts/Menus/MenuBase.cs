@@ -7,24 +7,35 @@ public abstract class MenuBase
     // Track state explicitly to avoid UI Toolkit's uninitialized style traps
     public bool IsOpen { get; private set; }
 
-    protected MenuBase(VisualElement root)
+    protected MenuBase(VisualElement root, bool startOpen = false)
     {
         this.root = root;
 
         // Synchronize our initial state with whatever the layout currently is
-        IsOpen = root.style.display == DisplayStyle.Flex;
+        if (startOpen)
+        {
+            Open();
+        }
+        else
+        {
+            Close();
+        }
     }
 
     // ---
 
     public virtual void Open()
     {
+        if (root == null) return;
+
         root.style.display = DisplayStyle.Flex;
         IsOpen = true;
     }
 
     public virtual void Close()
     {
+        if (root == null) return;
+
         root.style.display = DisplayStyle.None;
         IsOpen = false;
     }

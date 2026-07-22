@@ -3,31 +3,12 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour
+public class SceneLoader : Singleton<SceneLoader>
 {
-    public static SceneLoader Instance { get; private set; }
-
-    // ---
-
     public event Action<Scene> OnSceneLoaded;
     public bool IsLoading { get; private set; }
 
     // ---
-
-    private void Awake()
-    {
-        SetInstance();
-    }
-
-    private void SetInstance()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
 
     public void LoadScene(string sceneName)
     {

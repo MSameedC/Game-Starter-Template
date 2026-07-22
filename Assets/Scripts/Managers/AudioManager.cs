@@ -3,12 +3,8 @@ using Redcode.Pools;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : Singleton<AudioManager>
 {
-    public static AudioManager Instance { get; private set; }
-
-    // ---
-
     [Header("Audio Mixer")]
     [SerializeField] AudioMixer masterMixer;
 
@@ -28,21 +24,6 @@ public class AudioManager : MonoBehaviour
     private int poolCount = 10;
 
     // ---
-
-    private void Awake()
-    {
-        SetInstance();
-    }
-
-    private void SetInstance()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
 
     private void Start()
     {

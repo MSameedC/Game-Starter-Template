@@ -2,15 +2,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public class UiManager : MonoBehaviour
+public class UiManager : Singleton<UiManager>
 {
-    public static UiManager Instance { get; private set; }
-
-    // ---
-
-    [SerializeField] private UIDocument uiDoc; // Container for menus
+    [SerializeField] private PanelRenderer panelRenderer;
 
     private VisualElement root;
+    private int panelVersion;
 
     // Menus
     public MainMenu MainMenu { get; private set; }
@@ -20,75 +17,116 @@ public class UiManager : MonoBehaviour
     public GameUi GameUi { get; private set; }
     public LoadingScreen LoadingScreen { get; private set; }
 
-    // ---
-
-    private void Awake()
-    {
-        SetInstance();
-        root = uiDoc.rootVisualElement;
-        CloseAllMenus();
-    }
-
-    private void SetInstance()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
+    #region Unity Lifecycle
 
     private void Start()
     {
-        Debug.Log("UiManager enabled");
-        SceneLoader.Instance.OnSceneLoaded += OnSceneLoaded;
+        if (SceneLoader.Instance != null)
+            SceneLoader.Instance.OnSceneLoaded += OnSceneLoaded;
+
+        // 💡 1. Process the active scene on boot!
+        SetupUiForScene(SceneManager.GetActiveScene());
     }
 
-    private void OnDestroy()
+    private void OnEnable()
     {
-        Debug.Log("UiManager disabled");
-        SceneLoader.Instance.OnSceneLoaded -= OnSceneLoaded;
+        if (panelRenderer != null)
+            panelRenderer.RegisterUIReloadCallback(OnUiReload);
     }
+
+    private void OnDisable()
+    {
+        if (panelRenderer != null)
+            panelRenderer.UnregisterUIReloadCallback(OnUiReload);
+
+        if (SceneLoader.Instance != null)
+            SceneLoader.Instance.OnSceneLoaded -= OnSceneLoaded;
+    }
+
+    #endregion
+
+    #region PanelRenderer Callbacks
+
+    private void OnUiReload(PanelRenderer panelRenderer, VisualElement root, int version)
+    {
+        this.root = root;
+        panelVersion = version;
+
+        // 💡 2. Re-bind and set up menus whenever the PanelRenderer tree reloads!
+        SetupUiForScene(SceneManager.GetActiveScene());
+    }
+
+    #endregion
+
+    #region Helpers
 
     public VisualElement GetElement(string name)
     {
-        return root.Q<VisualElement>(name);
+        if (root == null)
+        {
+            Debug.LogWarning($"UiManager: Tried to query '{name}' before visual tree root was set!");
+            return null;
+        }
+
+        VisualElement elem = root.Q<VisualElement>(name);
+        if (elem == null)
+        {
+            Debug.LogError($"UiManager: Could not find element named '{name}' in UXML!");
+        }
+
+        return elem;
     }
 
     public void CloseAllMenus()
     {
         Debug.Log("Closing all menus");
 
-        if (MainMenu != null) MainMenu.Close();
-        if (PauseMenu != null) PauseMenu.Close();
-        if (SettingsMenu != null) SettingsMenu.Close();
-        if (GameUi != null) GameUi.Close();
-        if (LoadingScreen != null) LoadingScreen.Close();
-        if (Hud != null) Hud.Close();
+        MainMenu?.Close();
+        PauseMenu?.Close();
+        SettingsMenu?.Close();
+        GameUi?.Close();
+        LoadingScreen?.Close();
+        Hud?.Close();
     }
+
+    #endregion
+
+    #region Scene Handling
 
     private void OnSceneLoaded(Scene scene)
     {
-        Debug.Log($"Ui loaded");
+        SetupUiForScene(scene);
+    }
 
+    private void SetupUiForScene(Scene scene)
+    {
+        // If root isn't bound yet, OnUiReload will trigger this again once it's ready!
+        if (root == null) return;
+
+        Debug.Log($"Setting up UI for scene: {scene.name}");
+
+        // 1. Instantiate ALL menu wrappers so every root element gets bound
+        MainMenu = new MainMenu(this);
+        PauseMenu = new PauseMenu(this);
+        SettingsMenu = new SettingsMenu(this);
+        Hud = new Hud(this);
+        GameUi = new GameUi(this);
+        LoadingScreen = new LoadingScreen(this);
+
+        // 2. Hide every menu across the board
         CloseAllMenus();
 
-        if (scene.name == SceneIds.MAIN_MENU_SCENE)
+        // 3. Open ONLY the menus intended for the active scene
+        if (scene.name == SceneIds.MENU_SCENE)
         {
-            MainMenu = new MainMenu(this);
-            SettingsMenu = new SettingsMenu(this);
-            LoadingScreen = new LoadingScreen(this);
-
             MainMenu.Open();
         }
         else
         {
-            PauseMenu = new PauseMenu(this);
-            SettingsMenu = new SettingsMenu(this);
-            LoadingScreen = new LoadingScreen(this);
-            Hud = new Hud(this);
-            GameUi = new GameUi(this);
+            Hud.Open();
+            GameUi.Open();
         }
     }
+
+    #endregion
 }

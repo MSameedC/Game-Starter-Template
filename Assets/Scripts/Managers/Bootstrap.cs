@@ -5,6 +5,9 @@ public class Bootstrap : MonoBehaviour
     [Header("Core Systems")]
     [SerializeField] private GameObject coreSystemsObject;
 
+    [Header("Setting")]
+    [SerializeField] private string startingScene = SceneIds.DEMO_SCENE;
+
     // ---
 
     private void Start()
@@ -19,7 +22,6 @@ public class Bootstrap : MonoBehaviour
         SaveSystem.LoadSettings();
         SaveSystem.LoadProgress();
 
-        SceneLoader.Instance.LoadScene(SceneIds.MAIN_MENU_SCENE);
+        SceneLoader.Instance.LoadScene(startingScene);
     }
-
 }
