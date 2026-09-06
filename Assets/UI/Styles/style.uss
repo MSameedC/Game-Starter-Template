@@ -1,9 +1,0 @@
-:root {
-    --primary-font-color: rgb(255, 255, 255);
-    --secondary-font-color: rgb(0, 0, 0);
-}
-
-.unity-label {
-    color: var(--primary-font-color);
-    -unity-font-definition: url("project://database/Assets/UI/Addons/fonts/race_sport/Race%20Sport.ttf?fileID=12800000&guid=b7e2d7b4739a2b2c09fd9efac0924f74&type=3#Race Sport");
-}

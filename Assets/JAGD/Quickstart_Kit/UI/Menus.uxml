@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="root" style="flex-grow: 1;">
+        <ui:VisualElement name="MainMenu" style="flex-grow: 1; position: absolute;">
+            <ui:Label text="MainMenu"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="Hud" style="flex-grow: 1; position: absolute;">
+            <ui:Label text="Hud"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

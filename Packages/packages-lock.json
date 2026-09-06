@@ -1,14 +1,5 @@
 {
   "dependencies": {
-    "com.maligan.unity-zed": {
-      "version": "https://github.com/maligan/unity-zed.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.ide.visualstudio": "2.0.20"
-      },
-      "hash": "25f1b97fedb6cf7b4b566c4a83ec8311b68d3e82"
-    },
     "com.unity.ai.navigation": {
       "version": "2.0.14",
       "depth": 0,
@@ -17,6 +8,14 @@
         "com.unity.modules.ai": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "com.unity.asset-store-tools": {
+      "version": "file:com.unity.asset-store-tools",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+      }
     },
     "com.unity.burst": {
       "version": "1.8.29",
@@ -45,12 +44,12 @@
       "source": "builtin",
       "dependencies": {}
     },
-    "com.unity.ide.visualstudio": {
-      "version": "2.0.26",
-      "depth": 1,
+    "com.unity.ide.rider": {
+      "version": "3.0.40",
+      "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.33"
+        "com.unity.ext.nunit": "1.0.6"
       },
       "url": "https://packages.unity.com"
     },
@@ -80,6 +79,13 @@
     "com.unity.nuget.mono-cecil": {
       "version": "1.11.6",
       "depth": 3,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.2",
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -150,7 +156,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.8.12",
+      "version": "1.8.13",
       "depth": 0,
       "source": "registry",
       "dependencies": {

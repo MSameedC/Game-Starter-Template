@@ -1,0 +1,17 @@
+{
+    "name": "JAGD.Kit",
+    "rootNamespace": "JAGD.Kit",
+    "references": [
+        "GUID:8f6e6ae3770c5ec48aec3ed639dd661e",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
